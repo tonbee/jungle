@@ -1,0 +1,11 @@
+.stage {
+    width:600px;
+    height:500px;
+    background-color:red;
+    overflow:hidden;
+}
+
+.stage td {
+    width:25px;
+    height:25px;
+}
