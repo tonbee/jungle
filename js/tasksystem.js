@@ -54,12 +54,20 @@
 
         this.walk_cycle = 0;
         this.walk_right_images = [
-            "1-01_right.png","1-02_right.png","1-03_right.png",
-            "1-04_right.png","1-05_right.png","1-06_right.png"
+            "1-01_right.png","1-01_right.png","1-01_right.png",
+            "1-02_right.png","1-02_right.png","1-02_right.png",
+            "1-03_right.png","1-03_right.png","1-03_right.png",
+            "1-04_right.png","1-04_right.png","1-04_right.png",
+            "1-05_right.png","1-05_right.png","1-05_right.png",
+            "1-06_right.png","1-06_right.png","1-06_right.png"
         ];
         this.walk_left_images = [
-            "1-01_left.png","1-02_left.png","1-03_left.png",
-            "1-04_left.png","1-05_left.png","1-06_left.png"
+            "1-01_left.png","1-01_left.png","1-01_left.png",
+            "1-02_left.png","1-02_left.png","1-02_left.png",
+            "1-03_left.png","1-03_left.png","1-03_left.png",
+            "1-04_left.png","1-04_left.png","1-04_left.png",
+            "1-05_left.png","1-05_left.png","1-05_left.png",
+            "1-06_left.png","1-06_left.png","1-06_left.png"
         ];
     }
 
@@ -72,10 +80,24 @@
         if (this.x < 0) {
             scroll = "left";
         }
+
+        if (last_move === "right") {
+            var length = this.walk_right_images.length;
+            var images = this.walk_right_images;
+            this.walk_cycle = (this.walk_cycle + length + 1) % length;
+            this.img_obj.attr("src",images[this.walk_cycle]);
+        }
+        if (last_move === "left") {
+            var length = this.walk_left_images.length;
+            var images = this.walk_left_images;
+            this.walk_cycle = (this.walk_cycle + length + 1) % length;
+            this.img_obj.attr("src",images[this.walk_cycle]);
+        }
+
         return true;
     }
 
-    var walk_diff = 10;
+    var walk_diff = 3;
     var last_move = "";
     Player.prototype.move_right = move_right;
     function move_right(){
@@ -85,10 +107,6 @@
             return;
             }
         */
-        var length = this.walk_right_images.length;
-        var images = this.walk_right_images;
-        this.walk_cycle = (this.walk_cycle + length + 1) % length;
-        this.img_obj.attr("src",images[this.walk_cycle]);
         this.x += walk_diff;
         last_move = "right"
     }
@@ -101,10 +119,6 @@
             return;
         }
         */
-        var length = this.walk_left_images.length;
-        var images = this.walk_left_images;
-        this.walk_cycle = (this.walk_cycle + length + 1) % length;
-        this.img_obj.attr("src",images[this.walk_cycle]);
         this.x -= walk_diff;
         last_move = "left"
     }
@@ -280,6 +294,9 @@
             } else if (e.keyCode == 37) {
                 if (!in_turn) { player.move_left();}
             }
+        });
+        $(window).keyup(function(e){
+            last_move = "";
         });
 
         $("#chara_button").click(function(e){
