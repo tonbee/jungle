@@ -28,8 +28,8 @@
 
     function musi_step(){
         this.life += 1;
-        this.x -= 10;
-        var y = this.base + Math.sin(this.life) * (stage.view_height / 8);
+        this.x -= 5;
+        var y = this.base + Math.sin(this.life/2) * (stage.view_height / 8);
         var in_view = set_view(this.obj,this.x,y);
         if (!in_view) {
             this.obj.remove();
@@ -53,18 +53,29 @@
     Player.prototype.step = player_step;
     function player_step(){
         set_view(this.obj,this.x,this.y);
+        if (stage.view_width < this.x) {
+            scroll = "right";
+        }
+        if (this.x < 0) {
+            scroll = "left";
+        }
         return true;
     }
 
     Player.prototype.move_right = move_right;
     function move_right(){
         this.img_obj.attr("src","hito1_right.png");
-        this.x += 10;
+        this.x += 5;
     }
     Player.prototype.move_left = move_left;
     function move_left(){
         this.img_obj.attr("src","hito1_left.png");
-        this.x -= 10;
+        this.x -= 5;
+    }
+
+    Player.prototype.reset = player_reset;
+    function player_reset(position){
+        this.x = position;
     }
 
     function set_view(obj,x,y){
@@ -77,10 +88,65 @@
         return true;
     }
 
+    var scroll = "none";
+
     function task_start(){
         var interval = 1000 / fps;
+        var scroll_interval = 10;
+
+        var cycle = 0;
+        var origin_left = -stage.view_width+10;
+
+        var scroll_reset = function(position){
+            var inner = $("#stage_inner");
+            inner.offset({top: inner.offsetTop, left : origin_left});
+            player.reset(position);
+            scroll = "none";
+            setTimeout(main_loop,interval);
+        }
+        var diff = 10;
+        var scroll_right_loop = function(){
+            cycle -= 8;
+            if (cycle <= (-1 * stage.view_width)) {
+                scroll_reset(diff);
+                return;
+            }
+            var inner = $("#stage_inner");
+            inner.offset({top: inner.offsetTop, left : origin_left + cycle});
+            setTimeout(scroll_right_loop,scroll_interval);
+        }
+
+        var scroll_left_loop = function(){
+            cycle += 8;
+            if (stage.view_width < cycle) {
+                scroll_reset(stage.view_width-diff);
+                return;
+            }
+            var inner = $("#stage_inner");
+            inner.offset({top: inner.offsetTop, left : origin_left + cycle});
+            setTimeout(scroll_left_loop,scroll_interval);
+        }
 
         var main_loop = function(){
+            if (scroll !== "none") {
+                for (var i = 0,l=task_list.length;i<l;i++){
+                    var task = task_list.shift();
+                    if (task !== player){
+                        task.obj.remove();
+                    } else {
+                        task_list.push(task);
+                    }
+                }
+                cycle = 0;
+                if (scroll === "right") {
+                    scroll_right_loop();
+                    return;
+                }
+                if (scroll === "left") {
+                    scroll_left_loop();
+                    return;
+                }
+            }
             for (var i = 0,l=task_list.length;i<l;i++){
                 var task = task_list.shift();
                 if (task.step()) {

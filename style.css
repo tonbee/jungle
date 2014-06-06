@@ -7,6 +7,19 @@
     z-index:0;
 }
 
+#stage_inner {
+    width:2400px;
+    height:572px;
+    offsetLeft:800px;
+    position:relative;
+}
+
+.haikei {
+    float:right;
+    margin:0px;
+    padding:0px;
+}
+
 #player {
     width:83;
     height:278;
