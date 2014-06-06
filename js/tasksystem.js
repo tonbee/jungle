@@ -81,46 +81,53 @@
             scroll = "left";
         }
 
-        if (last_move === "right") {
-            var length = this.walk_right_images.length;
-            var images = this.walk_right_images;
-            this.walk_cycle = (this.walk_cycle + length + 1) % length;
-            this.img_obj.attr("src",images[this.walk_cycle]);
-        }
-        if (last_move === "left") {
-            var length = this.walk_left_images.length;
-            var images = this.walk_left_images;
-            this.walk_cycle = (this.walk_cycle + length + 1) % length;
-            this.img_obj.attr("src",images[this.walk_cycle]);
+        if (!in_turn) {
+            if (last_move === "right") {
+                var length = this.walk_right_images.length;
+                var images = this.walk_right_images;
+                this.walk_cycle = (this.walk_cycle + length + 1) % length;
+                this.img_obj.attr("src",images[this.walk_cycle]);
+            }
+            if (last_move === "left") {
+                var length = this.walk_left_images.length;
+                var images = this.walk_left_images;
+                this.walk_cycle = (this.walk_cycle + length + 1) % length;
+                this.img_obj.attr("src",images[this.walk_cycle]);
+            }
         }
 
         return true;
     }
 
-    var walk_diff = 3;
+    var walk_diff = 4;
     var last_move = "";
+    var player_dir = "";
     Player.prototype.move_right = move_right;
     function move_right(){
-        /*
-        if (last_move !== "right") {
+        if (player_dir === "left") {
+            in_turn = true;
+            last_move = "right"
+            player_dir = "right"
             player.turn_right();
             return;
-            }
-        */
+        }
         this.x += walk_diff;
         last_move = "right"
+        player_dir = "right"
     }
 
     Player.prototype.move_left = move_left;
     function move_left(){
-        /*
-        if (last_move !== "left") {
+        if (player_dir === "right") {
+            in_turn = true;
+            last_move = "left"
+            player_dir = "left"
             player.turn_left();
             return;
         }
-        */
         this.x -= walk_diff;
         last_move = "left"
+        player_dir = "left"
     }
 
     Player.prototype.reset = player_reset;
@@ -129,15 +136,15 @@
     }
 
     var in_turn = false;
+    var turn_interval = 100;
     Player.prototype.turn_right = player_turn_right;
     function player_turn_right(){
-        return;
-        in_turn = true;
-        var turn_interval = 10;
+        console.log("in_turn");
         var cycle = 0;
-        var images = [];
+        var images = ["2-04.png","2-03.png","2-02.png","2-01.png","1-01_right.png"]
+        var img_obj = this.img_obj;
         var loop = function(){
-            this.img_obj.attr("src",images[cycle]);
+            img_obj.attr("src",images[cycle]);
             cycle += 1
             if (cycle !== images.length) {
                 setTimeout(loop,turn_interval);
@@ -150,13 +157,12 @@
 
     Player.prototype.turn_left = player_turn_left;
     function player_turn_left(){
-        return;
-        in_turn = true;
-        var turn_interval = 10;
+        console.log("in_turn");
         var cycle = 0;
-        var images = [];
+        var images = ["1-01_right.png","2-01.png","2-02.png","2-03.png","2-04.png"]
+        var img_obj = this.img_obj;
         var loop = function(){
-            this.img_obj.attr("src",images[cycle]);
+            img_obj.attr("src",images[cycle]);
             cycle += 1
             if (cycle !== images.length) {
                 setTimeout(loop,turn_interval);
@@ -289,6 +295,7 @@
     function register_handlers(){
         // keycode <-:37 ^:38 ->:39 V:40
         $(window).keydown(function(e){
+            console.log(last_move);
             if (e.keyCode === 39) {
                 if (!in_turn) { player.move_right();}
             } else if (e.keyCode == 37) {
@@ -296,6 +303,7 @@
             }
         });
         $(window).keyup(function(e){
+            console.log(last_move + " done.");
             last_move = "";
         });
 
