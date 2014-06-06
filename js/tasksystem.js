@@ -5,11 +5,9 @@
     var fps = 10;
 
     var stage = {
-        cell_width : 23,
         view_width : 800,
         view_height : 572,
         map_pos: 0,
-        point : 0
     }
 
     var map_images = [
@@ -19,7 +17,7 @@
     var task_list = [];
 
     function Musi(){
-        this.x = stage.point + stage.view_width - 1;
+        this.x = stage.view_width - 1;
         this.base = Math.floor(Math.random() * stage.view_height);
 
         var obj = $("<div>");
@@ -49,7 +47,7 @@
         this.width = player_width;
         this.height = player_height;
 
-        this.x = stage.point + 20 ;// tekitou
+        this.x = 20 ;// tekitou
         this.y = stage.view_height - player_height;
         this.obj = $("#player");
         this.img_obj = $("#player_image");
@@ -84,7 +82,7 @@
     }
 
     function set_view(obj,x,y){
-        var view_x = x - stage.point;
+        var view_x = x;
         if (view_x < 0 || stage.view_width < view_x) {
             return false;
         }
@@ -116,10 +114,10 @@
     var scroll = "none";
     var origin_left = -stage.view_width+10;
 
-    function scroll_reset(position){
+    function scroll_reset(player_position){
         var inner = $("#stage_inner");
         inner.offset({top: inner.offsetTop, left : origin_left});
-        player.reset(position);
+        player.reset(player_position);
         map_reset();
         scroll = "none";
     }
@@ -129,24 +127,21 @@
         var scroll_interval = 10;
 
         var cycle = 0;
-
         var diff = 10;
-        var scroll_reset = function(position){
-            var inner = $("#stage_inner");
-            inner.offset({top: inner.offsetTop, left : origin_left});
-            player.reset(position);
-            map_reset();
-            scroll = "none";
-            setTimeout(main_loop,scroll_interval);
+
+        var scroll_reset_inner = function(player_position){
+            scroll_reset(player_position)
+            setTimeout(main_loop,interval);
         }
+
+        var inner = $("#stage_inner");
 
         var scroll_right_loop = function(){
             cycle -= 8;
             if (cycle <= (-1 * stage.view_width)) {
-                scroll_reset(diff);
+                scroll_reset_inner(diff);
                 return;
             }
-            var inner = $("#stage_inner");
             inner.offset({top: inner.offsetTop, left : origin_left + cycle});
             setTimeout(scroll_right_loop,scroll_interval);
         }
@@ -154,10 +149,9 @@
         var scroll_left_loop = function(){
             cycle += 8;
             if (stage.view_width < cycle) {
-                scroll_reset(stage.view_width-diff);
+                scroll_reset_inner(stage.view_width-diff);
                 return;
             }
-            var inner = $("#stage_inner");
             inner.offset({top: inner.offsetTop, left : origin_left + cycle});
             setTimeout(scroll_left_loop,scroll_interval);
         }
@@ -201,8 +195,7 @@
     }
 
     var player;
-    function main(){
-        console.log("main start");
+    function init_player(){
         player = new Player();
         task_list.push(player);
     }
@@ -222,8 +215,8 @@
         });
     }
 
-    main();
+    init_player();
     register_handlers();
-    scroll_reset(10,false);
+    scroll_reset(10);
     task_start();
 }());
