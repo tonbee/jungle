@@ -94,11 +94,29 @@
                 this.walk_cycle = (this.walk_cycle + length + 1) % length;
                 this.img_obj.attr("src",images[this.walk_cycle]);
             }
+            if (last_move === ""){
+                last_move_count += 1;
+                if (last_move_count > 15) {
+                    player_dir = "";
+                    return true;
+                }
+                var idx = (last_move_count / 5);
+                var images;
+                if (player_dir === "right") {
+                    // right ->
+                    images = ["1-01_right.png","2-01.png","2-02.png"]
+                } else {
+                    // left ->
+                    images = ["2-04.png","2-03.png","2-02.png"]
+                }
+                this.img_obj.attr("src",images[idx]);
+            }
         }
 
         return true;
     }
 
+    var last_move_count = 0;
     var walk_diff = 4;
     var last_move = "";
     var player_dir = "";
@@ -305,6 +323,7 @@
         $(window).keyup(function(e){
             console.log(last_move + " done.");
             last_move = "";
+            last_move_count = 0;
         });
 
         $("#chara_button").click(function(e){
