@@ -11,7 +11,7 @@
     }
 
     var map_images = [
-        "haike1.png","haike2.png","haike3.jpg"
+        "haike1.png","haike2.png","haike3.jpg","haike4.png"
     ];
 
     var task_list = [];
