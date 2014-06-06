@@ -51,6 +51,16 @@
         this.y = stage.view_height - player_height;
         this.obj = $("#player");
         this.img_obj = $("#player_image");
+
+        this.walk_cycle = 0;
+        this.walk_right_images = [
+            "1-01_right.png","1-02_right.png","1-03_right.png",
+            "1-04_right.png","1-05_right.png","1-06_right.png"
+        ];
+        this.walk_left_images = [
+            "1-01_left.png","1-02_left.png","1-03_left.png",
+            "1-04_left.png","1-05_left.png","1-06_left.png"
+        ];
     }
 
     Player.prototype.step = player_step;
@@ -65,20 +75,82 @@
         return true;
     }
 
+    var walk_diff = 10;
+    var last_move = "";
     Player.prototype.move_right = move_right;
     function move_right(){
-        this.img_obj.attr("src","hito1_right.png");
-        this.x += 5;
+        /*
+        if (last_move !== "right") {
+            player.turn_right();
+            return;
+            }
+        */
+        var length = this.walk_right_images.length;
+        var images = this.walk_right_images;
+        this.walk_cycle = (this.walk_cycle + length + 1) % length;
+        this.img_obj.attr("src",images[this.walk_cycle]);
+        this.x += walk_diff;
+        last_move = "right"
     }
+
     Player.prototype.move_left = move_left;
     function move_left(){
-        this.img_obj.attr("src","hito1_left.png");
-        this.x -= 5;
+        /*
+        if (last_move !== "left") {
+            player.turn_left();
+            return;
+        }
+        */
+        var length = this.walk_left_images.length;
+        var images = this.walk_left_images;
+        this.walk_cycle = (this.walk_cycle + length + 1) % length;
+        this.img_obj.attr("src",images[this.walk_cycle]);
+        this.x -= walk_diff;
+        last_move = "left"
     }
 
     Player.prototype.reset = player_reset;
     function player_reset(position){
         this.x = position;
+    }
+
+    var in_turn = false;
+    Player.prototype.turn_right = player_turn_right;
+    function player_turn_right(){
+        return;
+        in_turn = true;
+        var turn_interval = 10;
+        var cycle = 0;
+        var images = [];
+        var loop = function(){
+            this.img_obj.attr("src",images[cycle]);
+            cycle += 1
+            if (cycle !== images.length) {
+                setTimeout(loop,turn_interval);
+            } else {
+                in_turn = false;
+            }
+        }
+        loop();
+    }
+
+    Player.prototype.turn_left = player_turn_left;
+    function player_turn_left(){
+        return;
+        in_turn = true;
+        var turn_interval = 10;
+        var cycle = 0;
+        var images = [];
+        var loop = function(){
+            this.img_obj.attr("src",images[cycle]);
+            cycle += 1
+            if (cycle !== images.length) {
+                setTimeout(loop,turn_interval);
+            } else {
+                in_turn = false;
+            }
+        }
+        loop();
     }
 
     function set_view(obj,x,y){
@@ -204,9 +276,9 @@
         // keycode <-:37 ^:38 ->:39 V:40
         $(window).keydown(function(e){
             if (e.keyCode === 39) {
-                player.move_right();
+                if (!in_turn) { player.move_right();}
             } else if (e.keyCode == 37) {
-                player.move_left();
+                if (!in_turn) { player.move_left();}
             }
         });
 
