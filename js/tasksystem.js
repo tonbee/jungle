@@ -8,8 +8,13 @@
         cell_width : 23,
         view_width : 800,
         view_height : 572,
+        map_pos: 0,
         point : 0
     }
+
+    var map_images = [
+        "haike1.png","haike2.png",
+    ];
 
     var task_list = [];
 
@@ -88,23 +93,53 @@
         return true;
     }
 
+    function move_map_pos(diff){
+        stage.map_pos += diff;
+        var length = map_images.length;
+        stage.map_pos = (stage.map_pos + length) % length;
+    }
+
+    function map_reset(){
+        console.log(stage.map_pos);
+        var length = map_images.length
+        var map0_file = map_images[(length + stage.map_pos - 1) % length];
+        var map1_file = map_images[(length + stage.map_pos    ) % length];
+        var map2_file = map_images[(length + stage.map_pos + 1) % length];
+        console.log(map0_file);
+        console.log(map1_file);
+        console.log(map2_file);
+        $("#map0").attr("src",map0_file);
+        $("#map1").attr("src",map1_file);
+        $("#map2").attr("src",map2_file);
+    }
+
     var scroll = "none";
+    var origin_left = -stage.view_width+10;
+
+    function scroll_reset(position){
+        var inner = $("#stage_inner");
+        inner.offset({top: inner.offsetTop, left : origin_left});
+        player.reset(position);
+        map_reset();
+        scroll = "none";
+    }
 
     function task_start(){
         var interval = 1000 / fps;
         var scroll_interval = 10;
 
         var cycle = 0;
-        var origin_left = -stage.view_width+10;
 
+        var diff = 10;
         var scroll_reset = function(position){
             var inner = $("#stage_inner");
             inner.offset({top: inner.offsetTop, left : origin_left});
             player.reset(position);
+            map_reset();
             scroll = "none";
-            setTimeout(main_loop,interval);
+            setTimeout(main_loop,scroll_interval);
         }
-        var diff = 10;
+
         var scroll_right_loop = function(){
             cycle -= 8;
             if (cycle <= (-1 * stage.view_width)) {
@@ -139,10 +174,12 @@
                 }
                 cycle = 0;
                 if (scroll === "right") {
+                    move_map_pos(1);
                     scroll_right_loop();
                     return;
                 }
                 if (scroll === "left") {
+                    move_map_pos(-1);
                     scroll_left_loop();
                     return;
                 }
@@ -166,7 +203,6 @@
     var player;
     function main(){
         console.log("main start");
-        // generate_table();
         player = new Player();
         task_list.push(player);
     }
@@ -188,5 +224,6 @@
 
     main();
     register_handlers();
+    scroll_reset(10,false);
     task_start();
 }());
