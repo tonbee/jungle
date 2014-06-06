@@ -1,12 +1,17 @@
 #stage0 {
+    width:800px;
+    height:572px;
+    background-color:green;
+    overflow:hidden;
     position:relative;
+    z-index:0;
 }
 
-.stage {
-    width:600px;
-    height:500px;
-    background-color:red;
-    overflow:hidden;
+#player {
+    width:83;
+    height:278;
+    position:absolute;
+    z-index:100;
 }
 
 .stage td {
@@ -21,3 +26,4 @@
     background-color:red;
     z-index:255;
 }
+
