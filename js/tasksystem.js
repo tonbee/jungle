@@ -52,6 +52,7 @@
         this.obj = $("#player");
         this.img_obj = $("#player_image");
 
+        this.down_cycle = 0;
         this.walk_cycle = 0;
         this.walk_right_images = [
             "1-01_right.png","1-01_right.png","1-01_right.png",
@@ -93,6 +94,21 @@
                 var images = this.walk_left_images;
                 this.walk_cycle = (this.walk_cycle + length + 1) % length;
                 this.img_obj.attr("src",images[this.walk_cycle]);
+            }
+            var down_unit = 5;
+            if (last_move === "down") {
+                var images;
+                if (player_dir === "right") {
+                    images = ["3-01_right.png","3-02_right.png","3-03_right.png"];
+                } else {
+                    images = ["3-01_left.png","3-02_left.png","3-03_left.png"];
+                }
+                var length = images.length;
+                this.down_cycle += 1;
+                if (this.down_cycle > (length - 1) * down_unit ) {
+                    this.down_cycle = (length - 1) * down_unit;
+                }
+                this.img_obj.attr("src",images[this.down_cycle / down_unit]);
             }
             if (last_move === ""){
                 last_move_count += 1;
@@ -336,6 +352,9 @@
             } else if (e.keyCode == 37) {
                 if (!in_turn) { player.move_left();}
             } else if (e.keyCode == 40) {
+                console.log("down");
+                last_move = "down";
+                player.down_cycle = 0;
             }
         });
         $(window).keyup(function(e){
