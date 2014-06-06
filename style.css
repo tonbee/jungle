@@ -1,3 +1,7 @@
+#stage0 {
+    position:relative;
+}
+
 .stage {
     width:600px;
     height:500px;
@@ -8,4 +12,12 @@
 .stage td {
     width:25px;
     height:25px;
+}
+
+.test_musi {
+    position:absolute;
+    width:25px;
+    height:25px;
+    background-color:red;
+    z-index:255;
 }
