@@ -14,9 +14,10 @@
 }
 
 .haikei {
-    float:right;
+    float:left;
     margin:0px;
     padding:0px;
+    position:relative;
 }
 
 #player {

@@ -11,7 +11,7 @@
     }
 
     var map_images = [
-        "haike1.png","haike2.png",
+        "haike1.png","haike2.png","haike3.jpg"
     ];
 
     var task_list = [];
@@ -207,6 +207,23 @@
         stage.map_pos = (stage.map_pos + length) % length;
     }
 
+    function random(n){
+        return Math.floor(Math.random() * n);
+    }
+
+    var map = [0,1,2];
+    function move_map_right(){
+        map[0] = map[1];
+        map[1] = map[2];
+        map[2] = random(map_images.length);
+    }
+
+    function move_map_left(){
+        map[2] = map[1];
+        map[1] = map[0];
+        map[0] = random(map_images.length);
+    }
+
     function map_reset(){
         console.log(stage.map_pos);
         var length = map_images.length
@@ -227,6 +244,7 @@
     function scroll_reset(player_position){
         var inner = $("#stage_inner");
         inner.offset({top: inner.offsetTop, left : origin_left});
+        //inner.offset({top: inner.offsetTop, left : inner.offsetLeft});
         player.reset(player_position);
         map_reset();
         scroll = "none";
@@ -313,17 +331,19 @@
     function register_handlers(){
         // keycode <-:37 ^:38 ->:39 V:40
         $(window).keydown(function(e){
-            console.log(last_move);
             if (e.keyCode === 39) {
                 if (!in_turn) { player.move_right();}
             } else if (e.keyCode == 37) {
                 if (!in_turn) { player.move_left();}
+            } else if (e.keyCode == 40) {
             }
         });
         $(window).keyup(function(e){
-            console.log(last_move + " done.");
-            last_move = "";
-            last_move_count = 0;
+            if (e.keyCode === 39 || e.keyCode === 37) {
+                console.log(last_move + " done.");
+                last_move = "";
+                last_move_count = 0;
+            }
         });
 
         $("#chara_button").click(function(e){
