@@ -50,7 +50,7 @@ var stage;
 
     Player.prototype.step = player_step;
     var walk_span_unit = 4;
-    var walk_diff = 20;
+    var walk_diff = 28;
     function player_step(){
         set_view(this.obj,this.x,this.y);
         if (stage.view_width < this.x) {
