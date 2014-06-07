@@ -11,7 +11,7 @@
     }
 
     var map_images = [
-        "haike1.png","haike2.png","haike3.jpg","haike4.png"
+        "images/haike1.png","images/haike2.png","images/haike3.jpg","images/haike4.png"
     ];
 
     var task_list = [];
@@ -87,13 +87,13 @@
                 var length = this.walk_right_images.length;
                 var images = this.walk_right_images;
                 this.walk_cycle = (this.walk_cycle + length + 1) % length;
-                this.img_obj.attr("src",images[this.walk_cycle]);
+                this.img_obj.attr("src","images/" + images[this.walk_cycle]);
             }
             if (last_move === "left") {
                 var length = this.walk_left_images.length;
                 var images = this.walk_left_images;
                 this.walk_cycle = (this.walk_cycle + length + 1) % length;
-                this.img_obj.attr("src",images[this.walk_cycle]);
+                this.img_obj.attr("src","images/" + images[this.walk_cycle]);
             }
             var down_unit = 5;
             if (last_move === "down") {
@@ -108,15 +108,15 @@
                 if (this.down_cycle > (length - 1) * down_unit ) {
                     this.down_cycle = (length - 1) * down_unit;
                 }
-                this.img_obj.attr("src",images[this.down_cycle / down_unit]);
+                this.img_obj.attr("src","images/" + images[this.down_cycle / down_unit]);
             }
             if (last_move === ""){
                 last_move_count += 1;
-                if (last_move_count > 15) {
+                if (last_move_count > 14) {
                     player_dir = "";
                     return true;
                 }
-                var idx = (last_move_count / 5);
+                var idx = Math.floor(last_move_count / 5);
                 var images;
                 if (player_dir === "right") {
                     // right ->
@@ -125,7 +125,7 @@
                     // left ->
                     images = ["2-04.png","2-03.png","2-02.png"]
                 }
-                this.img_obj.attr("src",images[idx]);
+                this.img_obj.attr("src","images/" + images[idx]);
             }
         }
 
@@ -178,7 +178,7 @@
         var images = ["2-04.png","2-03.png","2-02.png","2-01.png","1-01_right.png"]
         var img_obj = this.img_obj;
         var loop = function(){
-            img_obj.attr("src",images[cycle]);
+            img_obj.attr("src","images/" + images[cycle]);
             cycle += 1
             if (cycle !== images.length) {
                 setTimeout(loop,turn_interval);
@@ -196,7 +196,7 @@
         var images = ["1-01_right.png","2-01.png","2-02.png","2-03.png","2-04.png"]
         var img_obj = this.img_obj;
         var loop = function(){
-            img_obj.attr("src",images[cycle]);
+            img_obj.attr("src","images/" + images[cycle]);
             cycle += 1
             if (cycle !== images.length) {
                 setTimeout(loop,turn_interval);
@@ -229,23 +229,41 @@
 
     var map = [0,1,2];
     function move_map_right(){
-        map[0] = map[1];
-        map[1] = map[2];
-        map[2] = random(map_images.length);
+        var length = 3;
+
+        var idx0 = (length + stage.map_pos - 1) % length;
+        var idx1 = (length + stage.map_pos) % length;
+        var idx2 = (length + stage.map_pos + 1) % length;
+
+        map[idx0] = map[idx1];
+        map[idx1] = map[idx2];
+        map[idx2] = random(map_images.length);
     }
 
     function move_map_left(){
-        map[2] = map[1];
-        map[1] = map[0];
-        map[0] = random(map_images.length);
+        var length = 3;
+
+        var idx0 = (length + stage.map_pos - 1) % length;
+        var idx1 = (length + stage.map_pos) % length;
+        var idx2 = (length + stage.map_pos + 1) % length;
+
+        map[idx2] = map[idx1];
+        map[idx1] = map[idx0];
+        map[idx0] = random(map_images.length);
     }
 
     function map_reset(){
         console.log(stage.map_pos);
-        var length = map_images.length
+        var length = map_images.length;
         var map0_file = map_images[(length + stage.map_pos - 1) % length];
         var map1_file = map_images[(length + stage.map_pos    ) % length];
         var map2_file = map_images[(length + stage.map_pos + 1) % length];
+        /*
+        var length = 3
+        var map0_file = map_images[map[(length + stage.map_pos - 1) % length]];
+        var map1_file = map_images[map[(length + stage.map_pos    ) % length]];
+        var map2_file = map_images[map[(length + stage.map_pos + 1) % length]];
+        */
         console.log(map0_file);
         console.log(map1_file);
         console.log(map2_file);
@@ -313,11 +331,13 @@
                 cycle = 0;
                 if (scroll === "right") {
                     move_map_pos(1);
+                    move_map_right()
                     scroll_right_loop();
                     return;
                 }
                 if (scroll === "left") {
                     move_map_pos(-1);
+                    move_map_left()
                     scroll_left_loop();
                     return;
                 }
