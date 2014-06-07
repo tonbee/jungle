@@ -108,7 +108,8 @@
                 if (this.down_cycle > (length - 1) * down_unit ) {
                     this.down_cycle = (length - 1) * down_unit;
                 }
-                this.img_obj.attr("src","images/" + images[this.down_cycle / down_unit]);
+                var idx = Math.floor(this.down_cycle / down_unit);
+                this.img_obj.attr("src","images/" + images[idx]);
             }
             if (last_move === ""){
                 last_move_count += 1;
