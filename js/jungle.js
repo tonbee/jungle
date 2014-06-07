@@ -122,23 +122,23 @@ var stage;
     Player.prototype.move_right = move_right;
     function move_right(){
         last_move = "right"
-        player_dir = "right"
-
         if (player_dir === "left") {
+            player_dir = "right"
             in_turn = true;
             player.turn_right();
         }
+        player_dir = "right"
     }
 
     Player.prototype.move_left = move_left;
     function move_left(){
         last_move = "left"
-        player_dir = "left"
-
         if (player_dir === "right") {
+            player_dir = "left"
             in_turn = true;
             player.turn_left();
         }
+        player_dir = "left"
     }
 
     Player.prototype.reset = player_reset;
