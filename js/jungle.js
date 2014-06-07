@@ -27,26 +27,29 @@
         this.img_obj = $("#player_image");
 
         this.down_cycle = 0;
+        this.walk_span = 0;
         this.walk_cycle = 0;
         this.walk_right_images = [
-            "1-01_right.png","1-01_right.png","1-01_right.png",
-            "1-02_right.png","1-02_right.png","1-02_right.png",
-            "1-03_right.png","1-03_right.png","1-03_right.png",
-            "1-04_right.png","1-04_right.png","1-04_right.png",
-            "1-05_right.png","1-05_right.png","1-05_right.png",
-            "1-06_right.png","1-06_right.png","1-06_right.png"
+            "1-01_right.png",
+            "1-02_right.png",
+            "1-03_right.png",
+            "1-04_right.png",
+            "1-05_right.png",
+            "1-06_right.png",
         ];
         this.walk_left_images = [
-            "1-01_left.png","1-01_left.png","1-01_left.png",
-            "1-02_left.png","1-02_left.png","1-02_left.png",
-            "1-03_left.png","1-03_left.png","1-03_left.png",
-            "1-04_left.png","1-04_left.png","1-04_left.png",
-            "1-05_left.png","1-05_left.png","1-05_left.png",
-            "1-06_left.png","1-06_left.png","1-06_left.png"
+            "1-01_left.png",
+            "1-02_left.png",
+            "1-03_left.png",
+            "1-04_left.png",
+            "1-05_left.png",
+            "1-06_left.png",
         ];
     }
 
     Player.prototype.step = player_step;
+    var walk_span_unit = 4;
+    var walk_diff = 20;
     function player_step(){
         set_view(this.obj,this.x,this.y);
         if (stage.view_width < this.x) {
@@ -57,18 +60,22 @@
         }
 
         if (!in_turn) {
-            if (last_move === "right") {
-                var length = this.walk_right_images.length;
-                var images = this.walk_right_images;
-                this.walk_cycle = (this.walk_cycle + length + 1) % length;
-                this.img_obj.attr("src","images/" + images[this.walk_cycle]);
+            if (last_move === "right" || last_move === "left") {
+                this.walk_span = (this.walk_span + 1) % walk_span_unit;
+                if (this.walk_span === 0) {
+                    if (last_move === "right") {
+                        var images = this.walk_right_images;
+                        this.x += walk_diff;
+                    } else {
+                        var images = this.walk_left_images;
+                        this.x -= walk_diff;
+                    }
+                    var length = images.length;
+                    this.walk_cycle = (this.walk_cycle + 1) % length;
+                    this.img_obj.attr("src","images/" + images[this.walk_cycle]);
+                }
             }
-            if (last_move === "left") {
-                var length = this.walk_left_images.length;
-                var images = this.walk_left_images;
-                this.walk_cycle = (this.walk_cycle + length + 1) % length;
-                this.img_obj.attr("src","images/" + images[this.walk_cycle]);
-            }
+
             var down_unit = 5;
             if (last_move === "down") {
                 var images;
@@ -108,7 +115,6 @@
     }
 
     var last_move_count = 0;
-    var walk_diff = 4;
     var last_move = "";
     var player_dir = "";
 
@@ -121,7 +127,6 @@
             player.turn_right();
             return;
         }
-        this.x += walk_diff;
         last_move = "right"
         player_dir = "right"
     }
@@ -135,7 +140,6 @@
             player.turn_left();
             return;
         }
-        this.x -= walk_diff;
         last_move = "left"
         player_dir = "left"
     }
