@@ -10,39 +10,13 @@
         map_pos: 0,
     }
 
-    var map_images = [
-        "images/haike1.png","images/haike2.png","images/haike3.jpg","images/haike4.png"
-    ];
-
     var task_list = [];
 
-    function Musi(){
-        this.x = stage.view_width - 1;
-        this.base = Math.floor(Math.random() * stage.view_height);
-
-        var obj = $("<div>");
-        obj.attr("class","test_musi");
-        $("#stage0").append(obj);
-        this.obj = obj;
-        this.life = 0;
-    }
-
-    Musi.prototype.step = musi_step;
-
-    function musi_step(){
-        this.life += 1;
-        this.x -= 5;
-        var y = this.base + Math.sin(this.life/2) * (stage.view_height / 8);
-        var in_view = set_view(this.obj,this.x,y);
-        if (!in_view) {
-            this.obj.remove();
-        } else {
-            return true;
-        }
-    }
+    /* Player Object */
 
     var player_width = 83;
     var player_height = 278;
+
     function Player(){
         this.width = player_width;
         this.height = player_height;
@@ -137,6 +111,7 @@
     var walk_diff = 4;
     var last_move = "";
     var player_dir = "";
+
     Player.prototype.move_right = move_right;
     function move_right(){
         if (player_dir === "left") {
@@ -172,12 +147,9 @@
 
     var in_turn = false;
     var turn_interval = 100;
-    Player.prototype.turn_right = player_turn_right;
-    function player_turn_right(){
+    function player_turn(images,img_obj){
         console.log("in_turn");
         var cycle = 0;
-        var images = ["2-04.png","2-03.png","2-02.png","2-01.png","1-01_right.png"]
-        var img_obj = this.img_obj;
         var loop = function(){
             img_obj.attr("src","images/" + images[cycle]);
             cycle += 1
@@ -190,22 +162,24 @@
         loop();
     }
 
+    Player.prototype.turn_right = player_turn_right;
+    function player_turn_right(){
+        var images = ["2-04.png","2-03.png","2-02.png","2-01.png","1-01_right.png"]
+        var img_obj = this.img_obj;
+        player_turn(images,img_obj);
+    }
+
     Player.prototype.turn_left = player_turn_left;
     function player_turn_left(){
-        console.log("in_turn");
-        var cycle = 0;
         var images = ["1-01_right.png","2-01.png","2-02.png","2-03.png","2-04.png"]
         var img_obj = this.img_obj;
-        var loop = function(){
-            img_obj.attr("src","images/" + images[cycle]);
-            cycle += 1
-            if (cycle !== images.length) {
-                setTimeout(loop,turn_interval);
-            } else {
-                in_turn = false;
-            }
-        }
-        loop();
+        player_turn(images,img_obj);
+    }
+
+    /* Utils */
+
+    function random(n){
+        return Math.floor(Math.random() * n);
     }
 
     function set_view(obj,x,y){
@@ -218,14 +192,15 @@
         return true;
     }
 
+    /* Map(haikei) */
+    var map_images = [
+        "images/haike1.png","images/haike2.png","images/haike3.jpg","images/haike4.png"
+    ];
+
     function move_map_pos(diff){
         stage.map_pos += diff;
         var length = map_images.length;
         stage.map_pos = (stage.map_pos + length) % length;
-    }
-
-    function random(n){
-        return Math.floor(Math.random() * n);
     }
 
     var map = [0,1,2];
@@ -271,6 +246,41 @@
         $("#map0").attr("src",map0_file);
         $("#map1").attr("src",map1_file);
         $("#map2").attr("src",map2_file);
+    }
+
+
+    /* Main */
+
+    var player;
+    function init_player(){
+        player = new Player();
+        task_list.push(player);
+    }
+
+    function register_handlers(){
+        // keycode <-:37 ^:38 ->:39 V:40
+        $(window).keydown(function(e){
+            if (e.keyCode === 39) {
+                if (!in_turn) { player.move_right();}
+            } else if (e.keyCode == 37) {
+                if (!in_turn) { player.move_left();}
+            } else if (e.keyCode == 40) {
+                console.log("down");
+                last_move = "down";
+                player.down_cycle = 0;
+            }
+        });
+        $(window).keyup(function(e){
+            if (e.keyCode === 39 || e.keyCode === 37) {
+                console.log(last_move + " done.");
+                last_move = "";
+                last_move_count = 0;
+            }
+        });
+
+        $("#chara_button").click(function(e){
+            task_list.push(new Musi());
+        });
     }
 
     var scroll = "none";
@@ -358,38 +368,34 @@
 
         main_loop();
     }
+    /* Objects */
 
-    var player;
-    function init_player(){
-        player = new Player();
-        task_list.push(player);
+    function Musi(){
+        this.x = stage.view_width - 1;
+        this.base = Math.floor(Math.random() * stage.view_height);
+
+        var obj = $("<div>");
+        obj.attr("class","test_musi");
+        $("#stage0").append(obj);
+        this.obj = obj;
+        this.life = 0;
     }
 
-    function register_handlers(){
-        // keycode <-:37 ^:38 ->:39 V:40
-        $(window).keydown(function(e){
-            if (e.keyCode === 39) {
-                if (!in_turn) { player.move_right();}
-            } else if (e.keyCode == 37) {
-                if (!in_turn) { player.move_left();}
-            } else if (e.keyCode == 40) {
-                console.log("down");
-                last_move = "down";
-                player.down_cycle = 0;
-            }
-        });
-        $(window).keyup(function(e){
-            if (e.keyCode === 39 || e.keyCode === 37) {
-                console.log(last_move + " done.");
-                last_move = "";
-                last_move_count = 0;
-            }
-        });
+    Musi.prototype.step = musi_step;
 
-        $("#chara_button").click(function(e){
-            task_list.push(new Musi());
-        });
+    function musi_step(){
+        this.life += 1;
+        this.x -= 5;
+        var y = this.base + Math.sin(this.life/2) * (stage.view_height / 8);
+        var in_view = set_view(this.obj,this.x,y);
+        if (!in_view) {
+            this.obj.remove();
+        } else {
+            return true;
+        }
     }
+
+    /* Entry Point */
 
     init_player();
     register_handlers();

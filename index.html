@@ -1,229 +1,26 @@
-﻿<!DOCTYPE html>
-
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="style.css" type="text/css" />
+  </head>
+  <body>
+    <h1>背景+キャラのテスト</h1>
+    カーソルキー左右で人移動 下でしゃがみ
+    <button id="chara_button">虫(仮)出現</button>
+    <div id="stage0">
+      <div id="stage_inner">
+        <img class="haikei" id="map0" />
+        <img class="haikei" id="map1" />
+        <img class="haikei" id="map2" />
+        <div id="player">
+          <img id="player_image" />
+        </div>
+      </div>
+    </div>
 
-<head>
-  <meta charset="UTF-8" />
-  <script language="javascript" src="jungle.js" ></script>
-</head>
-
-<body>
-
-<table cellpadding="0" cellspacing="0">
-
-<tr>
-
-<td id="masu1">
-<img src="sora.jpg" id = "masuid1">
-</td>
-<td id="masu2">
-<img src="sora.jpg" id = "masuid2">
-</td>
-
-<td id="masu3">
-<img src="sora.jpg" id = "masuid3">
-</td>
-<td id="masu4">
-<img src="sora.jpg" id = "masuid4">
-</td>
-
-<td id="masu5">
-<img src="sora.jpg" id = "masuid5">
-</td>
-<td id="masu6">
-<img src="sora.jpg" id = "masuid6">
-</td>
-
-<td id="masu7">
-<img src="sora.jpg" id = "masuid7">
-</td>
-<td id="masu8">
-<img src="sora.jpg" id = "masuid8">
-</td>
-
-<td id="masu9">
-<img src="sora.jpg" id = "masuid9">
-</td>
-<td id="masu10">
-<img src="sora.jpg" id = "masuid10">
-</td>
-
-</tr>
-
-<tr>
-
-<td id="masu11">
-<img src="sora.jpg" id = "masuid11">
-</td>
-<td id="masu12">
-<img src="sora.jpg" id = "masuid12">
-</td>
-
-<td id="masu13">
-<img src="sora.jpg" id = "masuid13">
-</td>
-<td id="masu14">
-<img src="sora.jpg" id = "masuid14">
-</td>
-
-<td id="masu15">
-<img src="sora.jpg" id = "masuid15">
-</td>
-<td id="masu16">
-<img src="sora.jpg" id = "masuid16">
-</td>
-
-<td id="masu17">
-<img src="sora.jpg" id = "masuid17">
-</td>
-<td id="masu18">
-<img src="sora.jpg" id = "masuid18">
-</td>
-
-<td id="masu19">
-<img src="sora.jpg" id = "masuid19">
-</td>
-<td id="masu20">
-<img src="sora.jpg" id = "masuid20">
-</td>
-
-</tr>
-
-<tr>
-
-<td id="masu21">
-<img src="sora.jpg" id = "masuid21">
-</td>
-<td id="masu22">
-<img src="sora.jpg" id = "masuid22">
-</td>
-
-<td id="masu23">
-<img src="sora.jpg" id = "masuid23">
-</td>
-<td id="masu24">
-<img src="tuti.jpg" id = "masuid24">
-</td>
-
-<td id="masu25">
-<img src="tuti.jpg" id = "masuid25">
-</td>
-<td id="masu26">
-<img src="tuti.jpg" id = "masuid26">
-</td>
-
-<td id="masu27">
-<img src="sora.jpg" id = "masuid27">
-</td>
-<td id="masu28">
-<img src="sora.jpg" id = "masuid28">
-</td>
-
-<td id="masu29">
-<img src="tuti.jpg" id = "masuid29">
-</td>
-<td id="masu30">
-<img src="tuti.jpg" id = "masuid30">
-</td>
-
-</tr>
-
-<tr>
-
-<td id="masu31">
-<img src="tuti.jpg" id = "masuid31">
-</td>
-<td id="masu32">
-<img src="tuti.jpg" id = "masuid32">
-</td>
-
-<td id="masu33">
-<img src="tuti.jpg" id = "masuid33">
-</td>
-<td id="masu34">
-<img src="tuti.jpg" id = "masuid34">
-</td>
-
-<td id="masu35">
-<img src="tuti.jpg" id = "masuid35">
-</td>
-<td id="masu36">
-<img src="tuti.jpg" id = "masuid36">
-</td>
-
-<td id="masu37">
-<img src="tuti.jpg" id = "masuid37">
-</td>
-<td id="masu38">
-<img src="tuti.jpg" id = "masuid38">
-</td>
-
-<td id="masu39">
-<img src="tuti.jpg" id = "masuid39">
-</td>
-<td id="masu40">
-<img src="tuti.jpg" id = "masuid40">
-</td>
-
-</tr>
-
-<tr>
-
-<td id="masu41">
-<img src="tuti.jpg" id = "masuid41">
-</td>
-<td id="masu42">
-<img src="tuti.jpg" id = "masuid42">
-</td>
-
-<td id="masu43">
-<img src="tuti.jpg" id = "masuid43">
-</td>
-<td id="masu44">
-<img src="tuti.jpg" id = "masuid44">
-</td>
-
-<td id="masu45">
-<img src="tuti.jpg" id = "masuid45">
-</td>
-<td id="masu46">
-<img src="tuti.jpg" id = "masuid46">
-</td>
-
-<td id="masu47">
-<img src="tuti.jpg" id = "masuid47">
-</td>
-<td id="masu48">
-<img src="tuti.jpg" id = "masuid48">
-</td>
-
-<td id="masu49">
-<img src="tuti.jpg" id = "masuid49">
-</td>
-<td id="masu50">
-<img src="tuti.jpg" id = "masuid50">
-</td>
-
-</tr>
-
-
-
-
-</table>
-
-
-
-
-</body>
-
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js">
+    </script>
+    <script language="javascript" src="js/jungle.js" ></script>
+  </body>
 </html>
-
-
-
-
-
-
-
-
-
-
