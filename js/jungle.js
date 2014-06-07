@@ -1,10 +1,11 @@
 "use strict";
+var stage;
 
 (function(){
 
     var fps = 10;
 
-    var stage = {
+    stage = {
         view_width : 800,
         view_height : 572,
         map_pos: 0,
@@ -219,6 +220,7 @@
         stage.map_pos = (stage.map_pos + length) % length;
     }
 
+    // スクロール直後などのマップ更新処理
     function map_reset(){
         console.log(stage.map_pos);
         console.log(map);
@@ -265,7 +267,7 @@
         });
 
         $("#chara_button").click(function(e){
-            task_list.push(new Musi());
+            task_list.push(new Objects.Musi());
         });
     }
 
@@ -351,33 +353,6 @@
         }
 
         main_loop();
-    }
-
-    /* Objects */
-
-    function Musi(){
-        this.x = stage.view_width - 1;
-        this.base = Math.floor(Math.random() * stage.view_height);
-
-        var obj = $("<div>");
-        obj.attr("class","test_musi");
-        $("#stage0").append(obj);
-        this.obj = obj;
-        this.life = 0;
-    }
-
-    Musi.prototype.step = musi_step;
-
-    function musi_step(){
-        this.life += 1;
-        this.x -= 5;
-        var y = this.base + Math.sin(this.life/2) * (stage.view_height / 8);
-        var in_view = set_view(this.obj,this.x,y);
-        if (!in_view) {
-            this.obj.remove();
-        } else {
-            return true;
-        }
     }
 
     /* Entry Point */
