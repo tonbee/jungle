@@ -120,28 +120,24 @@
 
     Player.prototype.move_right = move_right;
     function move_right(){
-        if (player_dir === "left") {
-            in_turn = true;
-            last_move = "right"
-            player_dir = "right"
-            player.turn_right();
-            return;
-        }
         last_move = "right"
         player_dir = "right"
+
+        if (player_dir === "left") {
+            in_turn = true;
+            player.turn_right();
+        }
     }
 
     Player.prototype.move_left = move_left;
     function move_left(){
-        if (player_dir === "right") {
-            in_turn = true;
-            last_move = "left"
-            player_dir = "left"
-            player.turn_left();
-            return;
-        }
         last_move = "left"
         player_dir = "left"
+
+        if (player_dir === "right") {
+            in_turn = true;
+            player.turn_left();
+        }
     }
 
     Player.prototype.reset = player_reset;
@@ -356,6 +352,7 @@
 
         main_loop();
     }
+
     /* Objects */
 
     function Musi(){
