@@ -194,52 +194,38 @@
 
     /* Map(haikei) */
     var map_images = [
-        "images/haike1.png","images/haike2.png","images/haike3.jpg","images/haike4.png"
+        "images/haike1.png","images/haike2.png","images/haike3.jpg","images/haike4.png",
+        "images/haike5.png"
     ];
+
+    var map = [];
+
+    function init_map(map_size){
+        var selected = [];
+        var i = 0;
+        for (;;) {
+            var n = random(map_images.length);
+            if (selected[n] === true) continue;
+            selected[n] = true;
+            map.push(n);
+            i += 1;
+            if (map_size === i) break;
+        }
+    }
 
     function move_map_pos(diff){
         stage.map_pos += diff;
-        var length = map_images.length;
+        var length = map.length;
         stage.map_pos = (stage.map_pos + length) % length;
-    }
-
-    var map = [0,1,2];
-    function move_map_right(){
-        var length = 3;
-
-        var idx0 = (length + stage.map_pos - 1) % length;
-        var idx1 = (length + stage.map_pos) % length;
-        var idx2 = (length + stage.map_pos + 1) % length;
-
-        map[idx0] = map[idx1];
-        map[idx1] = map[idx2];
-        map[idx2] = random(map_images.length);
-    }
-
-    function move_map_left(){
-        var length = 3;
-
-        var idx0 = (length + stage.map_pos - 1) % length;
-        var idx1 = (length + stage.map_pos) % length;
-        var idx2 = (length + stage.map_pos + 1) % length;
-
-        map[idx2] = map[idx1];
-        map[idx1] = map[idx0];
-        map[idx0] = random(map_images.length);
     }
 
     function map_reset(){
         console.log(stage.map_pos);
-        var length = map_images.length;
-        var map0_file = map_images[(length + stage.map_pos - 1) % length];
-        var map1_file = map_images[(length + stage.map_pos    ) % length];
-        var map2_file = map_images[(length + stage.map_pos + 1) % length];
-        /*
-        var length = 3
+        console.log(map);
+        var length = map.length;
         var map0_file = map_images[map[(length + stage.map_pos - 1) % length]];
         var map1_file = map_images[map[(length + stage.map_pos    ) % length]];
         var map2_file = map_images[map[(length + stage.map_pos + 1) % length]];
-        */
         console.log(map0_file);
         console.log(map1_file);
         console.log(map2_file);
@@ -342,13 +328,11 @@
                 cycle = 0;
                 if (scroll === "right") {
                     move_map_pos(1);
-                    move_map_right()
                     scroll_right_loop();
                     return;
                 }
                 if (scroll === "left") {
                     move_map_pos(-1);
-                    move_map_left()
                     scroll_left_loop();
                     return;
                 }
@@ -398,6 +382,7 @@
     /* Entry Point */
 
     init_player();
+    init_map(3);
     register_handlers();
     scroll_reset(10);
     task_start();
