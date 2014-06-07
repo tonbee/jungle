@@ -40,3 +40,8 @@
     z-index:255;
 }
 
+.objects {
+    position:absolute;
+    z-index:255;
+}
+

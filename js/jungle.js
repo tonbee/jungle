@@ -234,8 +234,43 @@ var stage;
         $("#map0").attr("src",map0_file);
         $("#map1").attr("src",map1_file);
         $("#map2").attr("src",map2_file);
+
+
+        generate_objects();
     }
 
+    /*
+       1画面に30体くらいのインスタンス。
+       1画面に植物系が2～3種類を× 8体。
+       動物系を2～3種類 × 3体くらいのイメージ
+    */
+
+    function generate_objects(){
+        var object_list = [];
+        for (var i in Objects) {
+            object_list.push(Objects[i]);
+        }
+
+        var selected = [];
+        // 植物生成
+        // var static_count = 2 + random(2);
+        var static_count = 1;
+        var count = 0;
+        var length = object_list.length;
+        for (var i = 0;i<100;i++) {
+            var n = random(length);
+            var obj = object_list[n];
+            if (selected[n] !== true && obj.kind === "static"){
+                if (obj.map.length === 0 || (map[stage.map_pos] in obj.map)) {
+                    for (var j = 0;j<8;j++){
+                        task_list.push(new obj());
+                    }
+                    count += 1;
+                    if (count === static_count) break;
+                }
+            }
+        }
+    }
 
     /* Main */
 
