@@ -197,18 +197,18 @@ var down_list = [];
     /* Map(haikei) */
     var map_images = [
         "images/haike1.png","images/haike2.png","images/haike3.jpg","images/haike4.png",
-        "images/haike5.png"
+        "images/haike5.png","images/haike6.png","images/haike8.png","images/haike7.png"
     ];
 
     var map = [];
 
     function init_map(map_size){
-        // map = [0,1,2,3,4];
+        // map = [0,1,2,3,4,5,6];
         // return;
         var selected = [];
         var i = 0;
         for (;;) {
-            var n = random(map_images.length);
+            var n = random(map_images.length-1);
             if (selected[n] === true) continue;
             selected[n] = true;
             map.push(n);
@@ -239,7 +239,9 @@ var down_list = [];
         $("#map2").attr("src",map2_file);
 
 
-        generate_objects();
+        if (map[stage.map_pos] !== 7) {
+            generate_objects();
+        }
     }
 
     /*
@@ -328,6 +330,11 @@ var down_list = [];
         return false;
     }
 
+    function goto_ending(){
+        console.log("ending");
+        location.href = "/ending/endding.htm";
+    }
+
     function register_handlers(){
         // keycode <-:37 ^:38 ->:39 V:40
         $(window).keydown(function(e){
@@ -335,6 +342,8 @@ var down_list = [];
                 if (!in_turn) { player.move_right();}
             } else if (e.keyCode == 37) {
                 if (!in_turn) { player.move_left();}
+            } else if (e.keyCode == 38 && map[stage.map_pos] === 7) {
+                goto_ending();
             } else if (e.keyCode == 40) {
                 console.log("down but..");
                 if (check_down()) {
@@ -368,6 +377,10 @@ var down_list = [];
         map_reset();
         scroll = "none";
     }
+
+    var start_time = new Date();
+    var end_time = 1000 * 60 * 5 + random(1000 * 60 * 4);
+    // var end_time = 1000; // デバッグ用
 
     function task_start(){
         var interval = 1000 / fps;
@@ -403,7 +416,14 @@ var down_list = [];
             setTimeout(scroll_left_loop,scroll_interval);
         }
 
+        var ending_flag = false;
         var main_loop = function(){
+            if ((new Date()) - start_time > end_time && ending_flag === false) {
+                ending_flag = true;
+                map[0] = 7;
+                console.log("ending on");
+            }
+
             if (scroll !== "none") {
                 for (var i = 0,l=task_list.length;i<l;i++){
                     var task = task_list.shift();
