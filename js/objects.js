@@ -151,34 +151,21 @@ var Objects = {};
 
         /* オブジェクト生成 thisを指定して関数を呼びだす */
         generate_objects_dom(this)
-        this.life = random(10);
-        this.state = 0;
+        this.state = random(this.images.length);
+        this.span = 2;
+        this.life = random(this.span);
     }
 
-    /* 名前をいれておく */
     Fumidai.obj_name = "フミダイ";
-    /* 動物ならdynamic,植物ならstatic */
     Fumidai.kind = "static";
-    /*  出現するマップ番号をいれる からはどこでも出現 */
     Fumidai.map = [0,3,5];
-
-    /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
-    Fumidai.prototype.step = fumidai_step;
-    function fumidai_step(){
-        /*
-          this.xとthis.yが座標
-          座標の更新と絵の切り替えと表示を行う
-        */
-
-        /* 画像のさしかえ(不要ならいらない) */
+    Fumidai.prototype.step = common_step;
+    function common_step(){
         this.life += 1;
-        if (this.life % 2 === 0) {
+        if (this.life % this.span === 0) {
             this.state = (this.state + 1) % this.images.length;
             this.img.attr("src",this.images[this.state]);
         }
-
-        /* 表示 */
-        /* はほぼ共通なので以下をコピペ */
         var in_view = set_view(this.obj,this.x,this.y);
         if (!in_view) {
             this.obj.remove();
@@ -187,7 +174,9 @@ var Objects = {};
         }
     }
 
+
     Objects.Garubanzo = Garubanzo;
+
     function Garubanzo(){
 
         /* 座標の初期値 */
@@ -195,13 +184,21 @@ var Objects = {};
         // 画面下部
         this.y = (stage.view_height * 4 / 5) + random(stage.view_height/5);
         /* 使う画像のリスト */
-        this.images = ["objects/670.png","objects/671.png"];
+        this.images = [
+            "objects/garuvbanzo/garubanzo1.png",
+            "objects/garuvbanzo/garubanzo2.png",
+            "objects/garuvbanzo/garubanzo3.png",
+            "objects/garuvbanzo/garubanzo4.png"
+        ]
         /* 拡大率の設定 %指定 */
         this.scale = 80 + random(50);
 
         /* オブジェクト生成 thisを指定して関数を呼びだす */
         generate_objects_dom(this)
-        this.life = 0;
+        this.span = 10;
+        this.life = random(this.span);
+        this.state = 0;
+        this.alive = true;
     }
 
     /* 名前をいれておく */
@@ -213,25 +210,19 @@ var Objects = {};
 
     /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
     Garubanzo.prototype.step = garubanzo_step;
-    function garubanzo_step(){
-        /*
-          this.xとthis.yが座標
-          座標の更新と絵の切り替えと表示を行う
-        */
 
-        /* 画像のさしかえ(不要ならいらない) */
-        /*
+    function garubanzo_step(){
+        if (this.alive === false) return;
         this.life += 1;
-        if (this.life % 10 === 0) {
-            this.state = 1 - this.state;
+        if (this.life % this.span === 0) {
+            this.state += 1;
+            if (this.state === this.images.length) {
+                this.alive = false;
+                this.obj.remove();
+                return;
+            }
             this.img.attr("src",this.images[this.state]);
         }
-        */
-
-        // not yet
-
-        /* 表示 */
-        /* はほぼ共通なので以下をコピペ */
         var in_view = set_view(this.obj,this.x,this.y);
         if (!in_view) {
             this.obj.remove();
@@ -239,59 +230,6 @@ var Objects = {};
             return true;
         }
     }
-    Objects.Garubanzo = Garubanzo;
-    function Garubanzo(){
-
-        /* 座標の初期値 */
-        this.x = random(stage.view_width - 20) + 10;
-        // 画面下部
-        this.y = (stage.view_height * 4 / 5) + random(stage.view_height/5);
-        /* 使う画像のリスト */
-        this.images = ["objects/670.png","objects/671.png"];
-        /* 拡大率の設定 %指定 */
-        this.scale = 50 + random(50);
-
-        /* オブジェクト生成 thisを指定して関数を呼びだす */
-        generate_objects_dom(this)
-        this.life = 0;
-    }
-
-    /* 名前をいれておく */
-    Garubanzo.obj_name = "ガルバンゾ";
-    /* 動物ならdynamic,植物ならstatic */
-    Garubanzo.kind = "static";
-    /*  出現するマップ番号をいれる からはどこでも出現 */
-    Garubanzo.map = [];
-
-    /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
-    Garubanzo.prototype.step = garubanzo_step;
-    function garubanzo_step(){
-        /*
-          this.xとthis.yが座標
-          座標の更新と絵の切り替えと表示を行う
-        */
-
-        /* 画像のさしかえ(不要ならいらない) */
-        /*
-        this.life += 1;
-        if (this.life % 10 === 0) {
-            this.state = 1 - this.state;
-            this.img.attr("src",this.images[this.state]);
-        }
-        */
-
-        // not yet
-
-        /* 表示 */
-        /* はほぼ共通なので以下をコピペ */
-        var in_view = set_view(this.obj,this.x,this.y);
-        if (!in_view) {
-            this.obj.remove();
-        } else {
-            return true;
-        }
-    }
-
 
     Objects.Zenmai = Zenmai;
     function Zenmai(){

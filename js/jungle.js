@@ -49,7 +49,7 @@ var stage;
     }
 
     Player.prototype.step = player_step;
-    var walk_span_unit = 4;
+    var walk_span_unit = 1;
     //var walk_span_unit = 1;
     var walk_diff = 28;
     function player_step(){
@@ -250,8 +250,9 @@ var stage;
 
     function generate_objects(){
         //task_list.push(new Objects.Nenkin());
-        //task_list.push(new Objects.Fumidai());
-        //return;
+        // task_list.push(new Objects.Garubanzo());
+        // task_list.push(new Objects.Fumidai());
+        // return;
         var object_list = [];
         for (var i in Objects) {
             object_list.push(Objects[i]);
