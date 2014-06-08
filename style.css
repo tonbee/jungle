@@ -24,7 +24,7 @@
     width:83;
     height:278;
     position:absolute;
-    z-index:100;
+    z-index:1000;
 }
 
 .stage td {

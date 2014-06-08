@@ -17,7 +17,7 @@ var Objects = {};
         return true;
     }
 
-    function generate_objects_dom(object){
+    function generate_objects_dom(object,fn){
         var obj = $("<div>");
         obj.attr("class","objects");
         var img = $("<img>");
@@ -27,15 +27,35 @@ var Objects = {};
 
         object.obj = obj;
         object.img = img;
-        object.width = img.width;
-        object.height = img.height;
 
-        /*
-        img.attr("width",object.scale);
-        img.attr("height",object.scale);
-        */
-
+        object.myloaded = false;
+        var first_bind = function(){
+            var jq = $(img);
+            object.width = jq.width();
+            object.height = jq.height();
+            if (fn !== undefined) {
+                fn();
+            }
+            if (object.scale !== undefined) {
+                change_scale(object,object.scale);
+            }
+            img.unbind("load",first_bind);
+        };
+        img.bind("load",first_bind);
         return;
+    }
+
+    function change_scale(object,rate){
+        var jq = $(object.img);
+        var height = jq.height();
+        var width = jq.width();
+        var new_height = height * rate / 100;
+        var new_width = width * rate / 100;
+        object.img.attr("height",new_height);
+        object.img.attr("width",new_width);
+
+        object.x = object.x + (height - new_width) / 2;
+        object.y = object.y + (height - new_height);
     }
 
     /* Objects */
@@ -323,17 +343,20 @@ var Objects = {};
     Objects.Eringi = Eringi;
     function Eringi(){
 
-        /* 座標の初期値 */
-        this.x = random(stage.view_width - 20) + 10;
-        // this.y = (stage.view_height * 4 / 5) + random(stage.view_height/5);
-        this.y = stage.view_height / 5 * 2;
         /* 使う画像のリスト */
         this.images = ["objects/706.png"];
         /* 拡大率の設定 %指定 */
         this.scale = 50 + random(50);
 
+        var self = this;
+        generate_objects_dom(this,function(){
+            /* 座標の初期値 */
+            var width = self.width;
+            self.x = random(stage.view_width - width) + width/2;
+            self.y = (stage.view_height * 9 / 10) + random(stage.view_height/10)-self.height;
+        });
+
         /* オブジェクト生成 thisを指定して関数を呼びだす */
-        generate_objects_dom(this)
         this.life = random(20);
         this.state = 0;
     }
@@ -456,20 +479,22 @@ var Objects = {};
 
     Objects.Ki = Ki;
     function Ki(){
-
-        /* 座標の初期値 */
-        this.x = random(stage.view_width - 20) + 10;
-        this.y = (stage.view_height * 4 / 5) + random(stage.view_height/5);
         /* 使う画像のリスト */
         this.images = ["objects/723.png"];
         /* 拡大率の設定 %指定 */
         this.scale = 50 + random(50);
 
         /* オブジェクト生成 thisを指定して関数を呼びだす */
-        generate_objects_dom(this)
-        console.log(this.img);
+        var self = this;
+        generate_objects_dom(this,function(){
+            /* 座標の初期値 */
+            var width = self.width;
+            self.x = random(stage.view_width - width) + width/2;
+            self.y = (stage.view_height * 9 / 10) + random(stage.view_height/10)-self.height;
+        });
         this.life = random(20);
         this.state = 0;
+        this.cycle = 50 + random(20);
     }
 
     /* 名前をいれておく */
@@ -490,6 +515,13 @@ var Objects = {};
         /* 画像のさしかえ(不要ならいらない) */
         // not yet
 
+        var limit = 7;
+        this.life += 1;
+        if (this.life < limit * this.cycle) {
+            if (this.life % this.cycle === 0) {
+                change_scale(this,120);
+            }
+        }
         /* 表示 */
         /* はほぼ共通なので以下をコピペ */
         var in_view = set_view(this.obj,this.x,this.y);
@@ -646,6 +678,14 @@ var Objects = {};
         /* 拡大率の設定 %指定 */
         this.scale = 50 + random(50);
 
+        var self = this;
+        generate_objects_dom(this,function(){
+            /* 座標の初期値 */
+            var width = self.width;
+            self.x = random(stage.view_width - width) + width/2;
+            self.y = (stage.view_height * 9 / 10) + random(stage.view_height/10)-self.height;
+        });
+
         /* オブジェクト生成 thisを指定して関数を呼びだす */
         generate_objects_dom(this)
         this.life = random(20);
@@ -670,6 +710,117 @@ var Objects = {};
         /* 画像のさしかえ(不要ならいらない) */
         // not yet
 
+        /* 表示 */
+        /* はほぼ共通なので以下をコピペ */
+        var in_view = set_view(this.obj,this.x,this.y);
+        if (!in_view) {
+            this.obj.remove();
+        } else {
+            return true;
+        }
+    }
+
+    Objects.OOM = OOM;
+    function OOM(){
+
+        /* 使う画像のリスト */
+        this.images = ["objects/740.png"];
+        /* 拡大率の設定 %指定 */
+        //this.scale = 50 + random(50);
+
+        /* オブジェクト生成 thisを指定して関数を呼びだす */
+        var self = this;
+        generate_objects_dom(this,function(){
+            /* 座標の初期値 */
+            self.x = random(stage.view_width - self.width);
+            var range = (stage.view_height - self.height);
+            self.y = (range * 4/ 5) + random(range/5);
+        })
+        this.life = random(20);
+        this.state = 0;
+    }
+
+    /* 名前をいれておく */
+    OOM.obj_name = "王蟲";
+    /* 動物ならdynamic,植物ならstatic */
+    OOM.kind = "dynamic";
+    /*  出現するマップ番号をいれる からはどこでも出現 */
+    OOM.map = [0];
+
+    /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
+    OOM.prototype.step = oom_step;
+    function oom_step(){
+        /*
+          this.xとthis.yが座標
+          座標の更新と絵の切り替えと表示を行う
+        */
+        if (this.state === 0) {
+            this.x -= 1;
+            if (random(100) < 10) {
+                this.state = 1;
+            }
+        } else {
+            if (random(100) < 10) {
+                this.state = 0;
+            }
+        }
+        /* 表示 */
+        /* はほぼ共通なので以下をコピペ */
+        var in_view = set_view(this.obj,this.x,this.y);
+        if (!in_view) {
+            this.obj.remove();
+        } else {
+            return true;
+        }
+    }
+
+    Objects.Nenkin = Nenkin;
+    function Nenkin(){
+
+        /* 使う画像のリスト */
+        this.images = [
+            "objects/702.png","objects/703.png",
+            "objects/704.png","objects/705.png"
+        ];
+        /* 拡大率の設定 %指定 */
+        this.scale = 50 + random(50);
+
+        /* オブジェクト生成 thisを指定して関数を呼びだす */
+        var self = this;
+        generate_objects_dom(this,function(){
+            /* 座標の初期値 */
+            if (self.x === undefined) {
+                self.x = random(stage.view_width - self.width);
+                var range = (stage.view_height - self.height);
+                self.y = (range * 4/ 5) + random(range/5);
+            }
+        })
+        this.state = 0;
+        this.life = 0;
+    }
+
+    /* 名前をいれておく */
+    Nenkin.obj_name = "粘菌";
+    /* 動物ならdynamic,植物ならstatic */
+    Nenkin.kind = "dynamic";
+    /*  出現するマップ番号をいれる からはどこでも出現 */
+    Nenkin.map = [];
+
+    /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
+    Nenkin.prototype.step = nenkin_step;
+    function nenkin_step(){
+        this.life += 1;
+        if (this.state < 3) {
+            if (this.life % 10 === 0) {
+                this.state += 1;
+                this.img.attr("src",this.images[this.state]);
+            }
+        } else {
+            if (this.life % 500 === 0) {
+                this.state = 0;
+                this.img.attr("src",this.images[this.state]);
+            }
+        }
         /* 表示 */
         /* はほぼ共通なので以下をコピペ */
         var in_view = set_view(this.obj,this.x,this.y);

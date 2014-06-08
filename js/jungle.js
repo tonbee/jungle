@@ -249,15 +249,18 @@ var stage;
     */
 
     function generate_objects(){
+        // task_list.push(new Objects.Nenkin());
+        // return;
         var object_list = [];
         for (var i in Objects) {
             object_list.push(Objects[i]);
+            console.log(Objects[i].obj_name);
         }
 
         var selected = [];
+
         // 植物生成
         var static_count = 2 + random(2);
-        // var static_count = 1;
         var count = 0;
         var length = object_list.length;
         for (var i = 0;i<100;i++) {
@@ -271,6 +274,25 @@ var stage;
                     }
                     count += 1;
                     if (count === static_count) break;
+                }
+            }
+        }
+
+        // 動物生成
+        var dynamic_count = 2 + random(2);
+        var count = 0;
+        var length = object_list.length;
+        for (var i = 0;i<100;i++) {
+            var n = random(length);
+            var obj = object_list[n];
+            if (selected[n] !== true && obj.kind === "dynamic"){
+                if (obj.map.length === 0 || (map[stage.map_pos] in obj.map)) {
+                    selected[n] = true;
+                    for (var j = 0;j < 3;j++){
+                        task_list.push(new obj());
+                    }
+                    count += 1;
+                    if (count === dynamic_count) break;
                 }
             }
         }
