@@ -203,8 +203,8 @@ var down_list = [];
     var map = [];
 
     function init_map(map_size){
-        map = [0,1,2,3,4];
-        return;
+        // map = [0,1,2,3,4];
+        // return;
         var selected = [];
         var i = 0;
         for (;;) {
