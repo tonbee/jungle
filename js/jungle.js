@@ -1,5 +1,6 @@
 "use strict";
 var stage;
+var down_list = [];
 
 (function(){
 
@@ -49,8 +50,7 @@ var stage;
     }
 
     Player.prototype.step = player_step;
-    var walk_span_unit = 1;
-    //var walk_span_unit = 1;
+    var walk_span_unit = 3;
     var walk_diff = 28;
     function player_step(){
         set_view(this.obj,this.x,this.y);
@@ -255,11 +255,14 @@ var stage;
         return false;
     }
 
+
     function generate_objects(){
         //task_list.push(new Objects.Nenkin());
         // task_list.push(new Objects.Garubanzo());
         // task_list.push(new Objects.Fumidai());
         // task_list.push(new Objects.ProperaSeed());
+        // task_list.push(new Objects.Buton());
+        // task_list.push(new Objects.Kirikabu());
         // return;
         var object_list = [];
         for (var i in Objects) {
@@ -267,7 +270,7 @@ var stage;
         }
 
         var selected = [];
-
+        down_list = [];
         // 植物生成
         var static_count = 2 + random(2);
         var count = 0;
@@ -315,6 +318,16 @@ var stage;
         task_list.push(player);
     }
 
+    var down_unit = 20;
+    function check_down(){
+        var self_x = player.x;
+        for (var i = 0,l=down_list.length;i<l;i++){
+            var dp = down_list[i];
+            if (dp - down_unit < self_x && self_x < dp + down_unit) return true;
+        }
+        return false;
+    }
+
     function register_handlers(){
         // keycode <-:37 ^:38 ->:39 V:40
         $(window).keydown(function(e){
@@ -323,9 +336,12 @@ var stage;
             } else if (e.keyCode == 37) {
                 if (!in_turn) { player.move_left();}
             } else if (e.keyCode == 40) {
-                console.log("down");
-                last_move = "down";
-                player.down_cycle = 0;
+                console.log("down but..");
+                if (check_down()) {
+                    console.log("down");
+                    last_move = "down";
+                    player.down_cycle = 0;
+                }
             }
         });
         $(window).keyup(function(e){

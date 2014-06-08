@@ -631,41 +631,24 @@ var Objects = {};
 
     Objects.Buton = Buton;
     function Buton(){
+        this.images = ["objects/suwarimono/button.png"];
 
-        /* 座標の初期値 */
-        this.x = random(stage.view_width - 20) + 10;
-        this.y = (stage.view_height * 4 / 5) + random(stage.view_height/5);
-        /* 使う画像のリスト */
-        this.images = ["objects/734.png","objects/735.png"];
-        /* 拡大率の設定 %指定 */
-        this.scale = 50 + random(50);
-
-        /* オブジェクト生成 thisを指定して関数を呼びだす */
-        generate_objects_dom(this)
-        this.life = random(20);
-        this.state = 0;
+        var self = this;
+        generate_objects_dom(this,function(){
+            var width = self.width;
+            self.x = random(stage.view_width - width) + width/2;
+            self.y = stage.view_height - self.height;
+            down_list.push(self.x);
+        });
     }
 
-    /* 名前をいれておく */
     Buton.obj_name = "ブトン";
-    /* 動物ならdynamic,植物ならstatic */
     Buton.kind = "static";
-    /*  出現するマップ番号をいれる からはどこでも出現 */
     Buton.map = [];
+    Buton.down = true;
 
-    /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
     Buton.prototype.step = buton_step;
     function buton_step(){
-        /*
-          this.xとthis.yが座標
-          座標の更新と絵の切り替えと表示を行う
-        */
-
-        /* 画像のさしかえ(不要ならいらない) */
-        // not yet
-
-        /* 表示 */
-        /* はほぼ共通なので以下をコピペ */
         var in_view = set_view(this.obj,this.x,this.y);
         if (!in_view) {
             this.obj.remove();
@@ -676,41 +659,24 @@ var Objects = {};
 
     Objects.Kirikabu = Kirikabu;
     function Kirikabu(){
+        this.images = ["objects/suwarimono/kirikabu.png"];
 
-        /* 座標の初期値 */
-        this.x = random(stage.view_width - 20) + 10;
-        this.y = (stage.view_height * 4 / 5) + random(stage.view_height/5);
-        /* 使う画像のリスト */
-        this.images = ["objects/734.png","objects/735.png"];
-        /* 拡大率の設定 %指定 */
-        this.scale = 50 + random(50);
-
-        /* オブジェクト生成 thisを指定して関数を呼びだす */
-        generate_objects_dom(this)
-        this.life = random(20);
-        this.state = 0;
+        var self = this;
+        generate_objects_dom(this,function(){
+            /* 座標の初期値 */
+            var width = self.width;
+            self.x = random(stage.view_width - width) + width/2;
+            self.y = stage.view_height - self.height;
+            down_list.push(self.x);
+        });
     }
 
-    /* 名前をいれておく */
     Kirikabu.obj_name = "キリカブ";
-    /* 動物ならdynamic,植物ならstatic */
     Kirikabu.kind = "static";
-    /*  出現するマップ番号をいれる からはどこでも出現 */
     Kirikabu.map = [];
 
-    /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
     Kirikabu.prototype.step = kirikabu_step;
     function kirikabu_step(){
-        /*
-          this.xとthis.yが座標
-          座標の更新と絵の切り替えと表示を行う
-        */
-
-        /* 画像のさしかえ(不要ならいらない) */
-        // not yet
-
-        /* 表示 */
-        /* はほぼ共通なので以下をコピペ */
         var in_view = set_view(this.obj,this.x,this.y);
         if (!in_view) {
             this.obj.remove();
