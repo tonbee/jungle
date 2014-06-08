@@ -331,6 +331,41 @@ var Objects = {};
         }
     }
 
+
+    Objects.HosoMukade = HosoMukade;
+    function HosoMukade(){
+        this.images = [
+            "objects/hosomukade/hosomukade1.png",
+            "objects/hosomukade/hosomukade2.png",
+            "objects/hosomukade/hosomukade3.png"
+        ];
+
+        var self = this;
+        this.scale = 90 + random(20);
+        generate_objects_dom(this,function(){
+            /* 座標の初期値 */
+            var width = self.width;
+            self.x = random(stage.view_width - width) + width/2;
+            self.y = (stage.view_height * 9 / 10) + random(stage.view_height/10)-self.height;
+        });
+
+        /* オブジェクト生成 thisを指定して関数を呼びだす */
+        this.span = 2;
+        this.life = random(this.span);
+        this.state = random(this.images.length);
+    }
+
+    /* 名前をいれておく */
+    HosoMukade.obj_name = "ホソムカデ";
+    /* 動物ならdynamic,植物ならstatic */
+    HosoMukade.kind = "static";
+    /*  出現するマップ番号をいれる からはどこでも出現 */
+    HosoMukade.map = [];
+
+    /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
+    HosoMukade.prototype.step = common_step;
+
+
     Objects.Nira = Nira;
     function Nira(){
 
