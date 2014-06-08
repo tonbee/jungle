@@ -366,6 +366,41 @@ var Objects = {};
     HosoMukade.prototype.step = common_step;
 
 
+    Objects.FutoMukade = FutoMukade;
+    function FutoMukade(){
+        this.images = [
+            "objects/mukadee/mukade1.png",
+            "objects/mukadee/mukade2.png",
+            "objects/mukadee/mukade3.png"
+        ];
+
+        var self = this;
+        this.scale = 90 + random(20);
+        generate_objects_dom(this,function(){
+            /* 座標の初期値 */
+            var width = self.width;
+            self.x = random(stage.view_width - width) + width/2;
+            //self.y = (stage.view_height / 10) - random(stage.view_height/5) - self.height;
+            self.y = random(stage.view_height/10);
+        });
+
+        /* オブジェクト生成 thisを指定して関数を呼びだす */
+        this.span = 2;
+        this.life = random(this.span);
+        this.state = random(this.images.length);
+    }
+
+    /* 名前をいれておく */
+    FutoMukade.obj_name = "フトムカデ";
+    /* 動物ならdynamic,植物ならstatic */
+    FutoMukade.kind = "dynamic";
+    /*  出現するマップ番号をいれる からはどこでも出現 */
+    FutoMukade.map = [1,4];
+
+    /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
+    FutoMukade.prototype.step = common_step;
+
+
     Objects.Nira = Nira;
     function Nira(){
 

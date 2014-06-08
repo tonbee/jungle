@@ -248,16 +248,22 @@ var stage;
        動物系を2～3種類 × 3体くらいのイメージ
     */
 
+    function include(list,elem){
+        for (var i = 0,l=list.length;i<l;i++){
+            if (list[i] === elem) return true;
+        }
+        return false;
+    }
+
     function generate_objects(){
         //task_list.push(new Objects.Nenkin());
         // task_list.push(new Objects.Garubanzo());
         // task_list.push(new Objects.Fumidai());
-        // task_list.push(new Objects.HosoMukade());
+        // task_list.push(new Objects.FutoMukade());
         // return;
         var object_list = [];
         for (var i in Objects) {
             object_list.push(Objects[i]);
-            console.log(Objects[i].obj_name);
         }
 
         var selected = [];
@@ -270,7 +276,7 @@ var stage;
             var n = random(length);
             var obj = object_list[n];
             if (selected[n] !== true && obj.kind === "static"){
-                if (obj.map.length === 0 || (map[stage.map_pos] in obj.map)) {
+                if (obj.map.length === 0 || include(obj.map,map[stage.map_pos])) {
                     selected[n] = true;
                     for (var j = 0;j < 5;j++){ // 8体は多いので5体に
                         task_list.push(new obj());
@@ -289,7 +295,7 @@ var stage;
             var n = random(length);
             var obj = object_list[n];
             if (selected[n] !== true && obj.kind === "dynamic"){
-                if (obj.map.length === 0 || (map[stage.map_pos] in obj.map)) {
+                if (obj.map.length === 0 || include(obj.map,map[stage.map_pos])) {
                     selected[n] = true;
                     for (var j = 0;j < 3;j++){
                         task_list.push(new obj());
