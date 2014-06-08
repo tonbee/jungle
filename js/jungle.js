@@ -16,7 +16,7 @@ var stage;
     /* Player Object */
 
     var player_width = 83;
-    var player_height = 278;
+    var player_height = 297;
 
     function Player(){
         this.width = player_width;
@@ -249,8 +249,9 @@ var stage;
     */
 
     function generate_objects(){
-        // task_list.push(new Objects.Nenkin());
-        // return;
+        //task_list.push(new Objects.Nenkin());
+        //task_list.push(new Objects.Fumidai());
+        //return;
         var object_list = [];
         for (var i in Objects) {
             object_list.push(Objects[i]);

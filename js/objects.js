@@ -140,14 +140,19 @@ var Objects = {};
         this.x = random(stage.view_width - 100) + 50;
         this.y = (stage.view_height * 4 / 5) + random(stage.view_height/5);
         /* 使う画像のリスト */
-        this.images = ["objects/668.png","objects/669.png"];
+        this.images = [
+            "objects/fumidai/fumidai1.png",
+            "objects/fumidai/fumidai2.png",
+            "objects/fumidai/fumidai3.png",
+            "objects/fumidai/fumidai4.png"
+        ]
         /* 拡大率の設定 %指定 */
-        this.scale = 50 + random(50);
+        this.scale = 80 + random(50);
 
         /* オブジェクト生成 thisを指定して関数を呼びだす */
         generate_objects_dom(this)
-        this.state = random(2);
         this.life = random(10);
+        this.state = 0;
     }
 
     /* 名前をいれておく */
@@ -167,8 +172,8 @@ var Objects = {};
 
         /* 画像のさしかえ(不要ならいらない) */
         this.life += 1;
-        if (this.life % 10 === 0) {
-            this.state = 1 - this.state;
+        if (this.life % 2 === 0) {
+            this.state = (this.state + 1) % this.images.length;
             this.img.attr("src",this.images[this.state]);
         }
 
@@ -192,7 +197,7 @@ var Objects = {};
         /* 使う画像のリスト */
         this.images = ["objects/670.png","objects/671.png"];
         /* 拡大率の設定 %指定 */
-        this.scale = 50 + random(50);
+        this.scale = 80 + random(50);
 
         /* オブジェクト生成 thisを指定して関数を呼びだす */
         generate_objects_dom(this)
