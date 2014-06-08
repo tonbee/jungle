@@ -792,8 +792,11 @@ var Objects = {};
 
         /* 使う画像のリスト */
         this.images = [
-            "objects/702.png","objects/703.png",
-            "objects/704.png","objects/705.png"
+            "objects/nenkin/nennkinn1.png",
+            "objects/nenkin/nennkinn2.png",
+            "objects/nenkin/nennkinn3.png",
+            "objects/nenkin/nennkinn4.png",
+            "objects/nenkin/nennkinn5.png"
         ];
         /* 拡大率の設定 %指定 */
         this.scale = 50 + random(50);
@@ -823,13 +826,13 @@ var Objects = {};
     Nenkin.prototype.step = nenkin_step;
     function nenkin_step(){
         this.life += 1;
-        if (this.state < 3) {
+        if (this.state < 4) {
             if (this.life % 10 === 0) {
                 this.state += 1;
                 this.img.attr("src",this.images[this.state]);
             }
         } else {
-            if (this.life % 500 === 0) {
+            if (this.life % 100 === 0) {
                 this.state = 0;
                 this.img.attr("src",this.images[this.state]);
             }
