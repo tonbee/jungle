@@ -50,6 +50,7 @@ var stage;
 
     Player.prototype.step = player_step;
     var walk_span_unit = 4;
+    //var walk_span_unit = 1;
     var walk_diff = 28;
     function player_step(){
         set_view(this.obj,this.x,this.y);
@@ -202,6 +203,8 @@ var stage;
     var map = [];
 
     function init_map(map_size){
+        map = [0,1,2,3,4];
+        return;
         var selected = [];
         var i = 0;
         for (;;) {
@@ -253,8 +256,8 @@ var stage;
 
         var selected = [];
         // 植物生成
-        // var static_count = 2 + random(2);
-        var static_count = 1;
+        var static_count = 2 + random(2);
+        // var static_count = 1;
         var count = 0;
         var length = object_list.length;
         for (var i = 0;i<100;i++) {
@@ -262,7 +265,8 @@ var stage;
             var obj = object_list[n];
             if (selected[n] !== true && obj.kind === "static"){
                 if (obj.map.length === 0 || (map[stage.map_pos] in obj.map)) {
-                    for (var j = 0;j<8;j++){
+                    selected[n] = true;
+                    for (var j = 0;j < 5;j++){ // 8体は多いので5体に
                         task_list.push(new obj());
                     }
                     count += 1;
