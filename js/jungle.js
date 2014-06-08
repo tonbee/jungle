@@ -259,7 +259,7 @@ var stage;
         //task_list.push(new Objects.Nenkin());
         // task_list.push(new Objects.Garubanzo());
         // task_list.push(new Objects.Fumidai());
-        // task_list.push(new Objects.FutoMukade());
+        // task_list.push(new Objects.ProperaSeed());
         // return;
         var object_list = [];
         for (var i in Objects) {

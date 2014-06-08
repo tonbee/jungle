@@ -567,7 +567,7 @@ var Objects = {};
     /* 動物ならdynamic,植物ならstatic */
     Propera.kind = "static";
     /*  出現するマップ番号をいれる からはどこでも出現 */
-    Propera.map = [2];
+    Propera.map = [1];
 
     /* 表示更新のために定期的に呼ばれる関数。stepメソッドとして登録 */
     Propera.prototype.step = pro_step;
@@ -579,6 +579,55 @@ var Objects = {};
 
         /* 画像のさしかえ(不要ならいらない) */
         // not yet
+
+        /* 表示 */
+        /* はほぼ共通なので以下をコピペ */
+        var in_view = set_view(this.obj,this.x,this.y);
+        if (!in_view) {
+            this.obj.remove();
+        } else {
+            return true;
+        }
+    }
+
+    Objects.ProperaSeed = ProperaSeed;
+    function ProperaSeed(){
+
+
+        this.images = [
+            "objects/propera/propera1.png",
+            "objects/propera/propera2.png"
+        ]
+        this.scale = 80 + random(40);
+
+        var self = this;
+        generate_objects_dom(this,function(){
+            /* 座標の初期値 */
+            var width = self.width;
+            var height = self.height;
+            self.x = random(stage.view_width - width) + width/2;
+            self.y = random(stage.view_height - height);
+        });
+
+        this.span = 2;
+        this.life = random(this.span);
+        this.state = 0;
+    }
+
+    /* 名前をいれておく */
+    ProperaSeed.obj_name = "プロペラの実";
+    ProperaSeed.kind = "static";
+    ProperaSeed.map = [1];
+    ProperaSeed.prototype.step = pros_step;
+    function pros_step(){
+        this.x += random(11) - 5;
+        this.y += random(11) - 5;
+
+        this.life += 1;
+        if (this.life % this.span === 0) {
+            this.state = (this.state + 1) % this.images.length;
+            this.img.attr("src",this.images[this.state]);
+        }
 
         /* 表示 */
         /* はほぼ共通なので以下をコピペ */
