@@ -195,7 +195,7 @@ var Objects = {};
 
         /* オブジェクト生成 thisを指定して関数を呼びだす */
         generate_objects_dom(this)
-        this.span = 10;
+        this.span = 40;
         this.life = random(this.span);
         this.state = 0;
         this.alive = true;
@@ -239,15 +239,13 @@ var Objects = {};
         // 画面下部
         this.y = (stage.view_height * 4 / 5) + random(stage.view_height/5);
         /* 使う画像のリスト */
-        this.images = ["objects/672.png","objects/673.png",
-                       "objects/675.png"];
+        this.images = ["objects/675.png"];
+
         /* 拡大率の設定 %指定 */
-        this.scale = 50 + random(50);
+        this.scale = 80 + random(40);
 
         /* オブジェクト生成 thisを指定して関数を呼びだす */
         generate_objects_dom(this)
-        this.life = random(20);
-        this.state = 0;
     }
 
     /* 名前をいれておく */
@@ -264,14 +262,6 @@ var Objects = {};
           this.xとthis.yが座標
           座標の更新と絵の切り替えと表示を行う
         */
-
-        /* 画像のさしかえ(不要ならいらない) */
-        this.life += 1;
-        if (this.life % 20 === 0) {
-            this.state += 1;
-            this.state = this.state % this.images.length;
-            this.img.attr("src",this.images[this.state]);
-        }
 
         /* 表示 */
         /* はほぼ共通なので以下をコピペ */
